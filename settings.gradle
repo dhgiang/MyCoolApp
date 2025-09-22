@@ -1,0 +1,4 @@
+rootProject.name = 'MyCoolApp'
+
+//include 'spring-core'
+//include 'src:main:Core'
