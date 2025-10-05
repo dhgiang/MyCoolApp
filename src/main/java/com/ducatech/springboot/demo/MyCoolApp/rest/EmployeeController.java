@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,14 +35,10 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/{employeeId}")
-    public Employee findById(@PathVariable int employeeId) {
+    public ResponseEntity<Employee> findById(@PathVariable int employeeId) {
         Optional<Employee> employee = employeeService.findById(employeeId);
 
-        if (employee.isEmpty()) {
-            throw new RuntimeException(("Employee id not found - " + employeeId));
-        }
-
-        return employee.orElse(null);
+        return employee.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @ResponseStatus(value = HttpStatus.CREATED)
